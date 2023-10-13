@@ -19,10 +19,15 @@ void  SdlInput::Update()
 	}
 	m_KeyStates = SDL_GetKeyboardState(nullptr);
 }
-
+static int convert[] = {
+	SDL_SCANCODE_A,
+	SDL_SCANCODE_D,
+	SDL_SCANCODE_S,
+	SDL_SCANCODE_W
+};
 bool SdlInput::IsKeyDown(int keycode)
 {
-	return m_KeyStates[keycode];
+	return m_KeyStates[convert[keycode]];
 }
 
 bool SdlInput::IsButtonDown(int button)

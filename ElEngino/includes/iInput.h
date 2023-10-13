@@ -1,5 +1,11 @@
 #pragma once
 namespace engino {
+	enum EKeycodes {
+		KEY_A,
+		KEY_D,
+		KEY_S,
+		KEY_W
+	};
 class IInput
 {
 public:

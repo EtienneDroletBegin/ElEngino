@@ -2,17 +2,18 @@
 #define VC_EXTRALEAN
 #include<Windows.h>
 #include "Engine.h"
+//#include <vld.h>
 
-
+using namespace engino;
 void initGamePlay() {
 }
 
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT) {
-	engino::Engine theEngine;
-	if (theEngine.Init(" Fènwa anndan an pral pran sou, pa gen anyen ou ka fè sou li, ou pral tranble epi mwen pral fè wout mwen.", 800, 600))
+	Engine* theEngine = Engine::Get();
+	if (theEngine->Init("As i walk through the valley of the shadow of death.", 800, 600))
 	{
 		initGamePlay();
-		theEngine.Start();
+		theEngine->Start();
 	}
 	return 0;
 }

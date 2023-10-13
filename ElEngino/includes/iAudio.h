@@ -1,0 +1,20 @@
+#pragma once
+#include <iostream>
+
+namespace engino {
+	class IAudio
+	{
+	public:
+		virtual size_t LoadMusic(const char* filename) = 0;
+		virtual size_t LoadSound(const std::string& filename) = 0;
+		virtual void PlayMusic(size_t id, int loop) = 0;
+		virtual void PlaySFX(size_t id, int loop) = 0;
+		virtual void PauseMusic() = 0;
+		virtual void StopMusic() = 0;
+		virtual void ResumeMusic() = 0;
+		virtual void SetVolume(int volume) = 0;
+		virtual void SetVolume(size_t soundId, int volume) = 0;
+
+	};
+
+}
