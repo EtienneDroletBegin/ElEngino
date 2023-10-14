@@ -35,38 +35,14 @@ bool engino::Engine::Init(const char* name, int w, int h) {
 	m_log = new ConsoleLogger();
 	//m_log = new FileLogger();
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-		m_log->Log(SDL_GetError());
-		return false;
-	}
-	int _x = SDL_WINDOWPOS_CENTERED;
-	int _y = SDL_WINDOWPOS_CENTERED;
-	Uint32 _flag = SDL_WINDOW_TOOLTIP;
-	Window = SDL_CreateWindow(name, _x, _y, w, h, _flag);
-
-	_flag = SDL_RENDERER_ACCELERATED;
-	renderer = SDL_CreateRenderer(Window, -1, _flag);
-
-	if (!Window)
-	{
-		m_log->Log(SDL_GetError());
-		return false;
-	}
-
-	if (!renderer) {
-		m_log->Log(SDL_GetError());
-		return false;
-	}
+	m_graphics = new SDLGraphics();
 	m_input = new SdlInput();
-	m_graphics = new SDLGraphics(renderer);
 	m_world = new WorldService();
 	m_mixer = new AudioMixer();
+	if (!m_graphics->Initialize(name, w, h)) {
+		m_log->Log(m_log->GetError());
+	}
 	m_isInit = true;
-
-
-	
-
 	return true;
 }
 
@@ -84,7 +60,6 @@ void engino::Engine::Start() {
 
 	clock_t _end = clock();
 	m_world->Start();
-	std::cout << m_mixer->LoadSound("assets/loaded.wav");
 	m_mixer->PlaySFX(m_mixer->LoadSound("assets/loaded.wav"), 0);
 	
 	while (m_isRunning && !m_input->_quit()) {
@@ -132,15 +107,12 @@ void engino::Engine::Update(float dt)
 /// </summary>
 void engino::Engine::Draw()
 {
-	SDL_SetRenderDrawColor(renderer,0,0,0,255);
-	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	m_graphics->Clear();
 
 	m_graphics->DrawFont(0, 0, 200, 200, m_graphics->LoadFont("assets/Roboto-Regular.ttf", 160), "TEST", Color::RED);
 	m_world->Draw();
 
-	SDL_RenderPresent(renderer);
-
+	m_graphics->Present();
 }
 
 /// <summary>

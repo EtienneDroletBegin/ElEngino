@@ -8,8 +8,12 @@ namespace engino {
 	class SDLGraphics final : public IGraphics
 	{
 	public:
-		SDLGraphics(SDL_Renderer* a_renderer);
+		SDLGraphics();
 		~SDLGraphics();
+		virtual void SetColor(const Color& color) override;
+		virtual void Clear() override;
+		virtual void Present() override;
+		virtual bool Initialize(const char* name, int w, int h) override;
 		virtual void Drawline(float x1, float y1, float x2, float y2) override;
 		virtual void DrawRect(int x, int y, int w, int h) override;
 		virtual void FillRect(int x, int y, int w, int h) override;
@@ -21,6 +25,7 @@ namespace engino {
 
 	private:
 		SDL_Renderer* renderer;
+		SDL_Window* Window;
 		std::map<size_t, SDL_Texture*> hashMap;
 		std::map<size_t, TTF_Font*> FontHash;
 	};

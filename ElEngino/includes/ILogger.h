@@ -7,6 +7,7 @@ namespace engino {
 
 	public:
 		virtual void Log(const char* message) = 0;
+		virtual const char* GetError() = 0;
 
 	protected:
 		virtual ~ILogger() = default;

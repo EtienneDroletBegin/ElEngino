@@ -10,6 +10,7 @@ namespace engino {
 	public:
 		ConsoleLogger();
 		virtual void Log(const char* message) override;
+		virtual const char* GetError() override;
 		virtual ~ConsoleLogger();
 	};
 

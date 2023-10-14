@@ -7,10 +7,9 @@ using namespace engino;
 
 
 
-engino::SDLGraphics::SDLGraphics(SDL_Renderer* a_renderer)
+engino::SDLGraphics::SDLGraphics()
 {
-	renderer = a_renderer;
-	TTF_Init();
+
 
 	
 }
@@ -18,6 +17,48 @@ engino::SDLGraphics::SDLGraphics(SDL_Renderer* a_renderer)
 engino::SDLGraphics::~SDLGraphics()
 {
 	TTF_Quit();
+}
+
+void engino::SDLGraphics::SetColor(const Color& color)
+{
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
+}
+
+void engino::SDLGraphics::Clear()
+{
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	
+}
+
+void engino::SDLGraphics::Present()
+{
+	SDL_RenderPresent(renderer);
+}
+
+bool engino::SDLGraphics::Initialize(const char* name, int w, int h)
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+
+		return false;
+	}
+	int _x = SDL_WINDOWPOS_CENTERED;
+	int _y = SDL_WINDOWPOS_CENTERED;
+	Uint32 _flag = SDL_WINDOW_TOOLTIP;
+	Window = SDL_CreateWindow(name, _x, _y, w, h, _flag);
+
+	_flag = SDL_RENDERER_ACCELERATED;
+	renderer = SDL_CreateRenderer(Window, -1, _flag);
+	TTF_Init();
+	if (!Window)
+	{
+		return false;
+	}
+	if (!renderer) {
+		return false;
+	}
+
+	return true; 
 }
 
 void engino::SDLGraphics::Drawline(float x1, float y1, float x2, float y2)

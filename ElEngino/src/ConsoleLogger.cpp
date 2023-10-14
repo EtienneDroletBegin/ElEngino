@@ -1,4 +1,5 @@
-#include "ConsoleLogger.h"
+#include "ConsoleLogger.h";
+#include "SDL.h";
 #include <iostream>
 #include <Windows.h>
 
@@ -16,4 +17,9 @@ engino::ConsoleLogger::~ConsoleLogger() {
 void engino::ConsoleLogger::Log(const char* message)
 {
 	//std::cout << "ERROR: " << message << std::endl;
+}
+
+const char* engino::ConsoleLogger::GetError()
+{
+	return SDL_GetError();
 }

@@ -13,6 +13,7 @@ namespace engino {
 		~FileLogger();
 
 		virtual void Log(const char* message) override;
+		virtual const char* GetError() override;
 
 	private:
 		std::ofstream MyFile;

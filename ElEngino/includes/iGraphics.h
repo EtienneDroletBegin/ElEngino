@@ -7,6 +7,10 @@ namespace engino {
 	class IGraphics
 	{
 	public:
+		virtual void SetColor(const Color& color) = 0;
+		virtual void Clear() = 0;
+		virtual void Present() = 0;
+		virtual bool Initialize(const char* name, int w, int h)= 0;
 		virtual void Drawline(float x1, float y1, float x2, float y2) = 0;
 		virtual void DrawRect(int x, int y, int w, int h) = 0;
 		virtual void FillRect(int x, int y, int w, int h) = 0;
