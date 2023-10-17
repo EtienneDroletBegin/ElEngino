@@ -94,9 +94,11 @@ void engino::Engine::ProccessInput(void)
 /// <param name="dt">the time elapsed between the current frame and the last</param>
 void engino::Engine::Update(float dt)
 {
+#if _DEBUG
 	if (m_input->IsKeyDown(SDL_SCANCODE_ESCAPE)) {
 		Stop();
 	}
+#endif
 
 	m_world->Update(dt);
 
