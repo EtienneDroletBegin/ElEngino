@@ -1,5 +1,6 @@
-class IUpdatable {
-public:
-	virtual void Update() = 0;
+#pragma once
 
-};
+class IUpdatable {
+	public:
+		virtual void Update(float dt) = 0;
+	};

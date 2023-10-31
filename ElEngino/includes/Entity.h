@@ -2,10 +2,10 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Component.h"
 #include "IUpdatable.h"
 #include "IDrawable.h"
 
+class Component;
 namespace engino {
 	class Entity final
 	{
@@ -23,17 +23,32 @@ namespace engino {
 		virtual void setPos(int x, int y) { m_x = x; m_y = y; }
 		virtual float GetX() { return m_x; }
 		virtual float GetY() { return m_y; }
+		virtual void SetX(int x) { m_x = x; }
+		virtual void SetY(int y) { m_y = y; }
 
 		template <typename T>
-		void AddComponent(T cmp);
+		void AddComponent() {
+			T cmp = new T(this);
+			const type_info* type = &typeid(*cmp);
+
+			IUpdatable* updatable = dynamic_cast<IUpdatable*>(cmp);
+			if (updatable != nullptr) {
+				m_updatable.emplace(type, updatable)
+			}
+
+			IDrawable* drawable = dynamic_cast<IDrawable*>(cmp);
+			if (drawable != nullptr) {
+				m_drawable.emplace(type, updatable)
+			}
+
+			m_components.push_back(cmp);
+		}
 
 	private:
 		size_t m_spriteID;
 		std::vector<Component*> m_components;
 		std::map<const type_info*, IUpdatable*> m_updatable;
 		std::map<const type_info*, IDrawable*> m_drawable;
-
-	protected:
 		const char* name;
 		float m_x;
 		float m_y;

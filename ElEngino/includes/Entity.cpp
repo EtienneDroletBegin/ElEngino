@@ -7,18 +7,7 @@ using namespace engino;
 
 void engino::Entity::update(float dt)
 {
-	if (Engine::Get()->input().IsKeyDown(EKeycodes::KEY_A)) {
-		m_x -= 800 * dt;
-	}
-	if (Engine::Get()->input().IsKeyDown(EKeycodes::KEY_D)) {
-		m_x += 800 * dt;
-	}
-	if (Engine::Get()->input().IsKeyDown(EKeycodes::KEY_W)) {
-		m_y -= 800 * dt;
-	}
-	if (Engine::Get()->input().IsKeyDown(EKeycodes::KEY_S)) {
-		m_y += 800 *dt;
-	}
+
 
 	for (auto c : m_components) {
 
