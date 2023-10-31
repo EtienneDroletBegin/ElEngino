@@ -1,7 +1,9 @@
 #pragma once
 #include "iAudio.h"
-#include "SDL_mixer.h"
 #include "map"
+
+struct Mix_Chunk;
+typedef struct _Mix_Music Mix_Music;
 
 namespace engino {
 

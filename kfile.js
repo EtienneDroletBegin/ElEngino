@@ -6,6 +6,7 @@ project.addFile("Solomon/**");
 
 project.setDebugDir("Deployment");
 project.addIncludeDir("./ElEngino/includes")
+project.addIncludeDir("./Solomon/includes")
 
 project.flatten();
 

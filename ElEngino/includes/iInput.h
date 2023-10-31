@@ -4,7 +4,9 @@ namespace engino {
 		KEY_A,
 		KEY_D,
 		KEY_S,
-		KEY_W
+		KEY_W,
+		Key_Esc,
+		Key_Space
 	};
 class IInput
 {

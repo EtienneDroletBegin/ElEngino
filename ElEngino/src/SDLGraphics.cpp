@@ -3,6 +3,8 @@
 #include "Color.h"
 #include <SDL.h>
 #include <iostream>
+#include <SDL_ttf.h>
+#include <SDL_image.h>
 using namespace engino;
 
 
@@ -66,6 +68,7 @@ void engino::SDLGraphics::Drawline(float x1, float y1, float x2, float y2)
 	SDL_RenderDrawLine(renderer, x1,y1,x2,y2);
 }
 
+#pragma region
 void engino::SDLGraphics::DrawRect(int x, int y, int w, int h)
 {
 	SDL_Rect get_rect = { 0 };
@@ -77,6 +80,21 @@ void engino::SDLGraphics::DrawRect(int x, int y, int w, int h)
 	SDL_RenderDrawRect(renderer, &get_rect);
 }
 
+void engino::SDLGraphics::DrawRect(const RectF& rect, const Color& color)
+{
+	SDL_Rect get_rect = { 0 };
+	get_rect.x = rect.x;
+	get_rect.y = rect.y;
+	get_rect.h = rect.h;
+	get_rect.w = rect.w;
+
+	SetColor(color);
+
+	SDL_RenderDrawRect(renderer, &get_rect);
+}
+#pragma endregion DrawRect
+
+#pragma region
 void engino::SDLGraphics::FillRect(int x, int y, int w, int h)
 {
 	SDL_Rect get_rect = { 0 };
@@ -87,6 +105,22 @@ void engino::SDLGraphics::FillRect(int x, int y, int w, int h)
 
 	SDL_RenderFillRect(renderer, &get_rect);
 }
+
+void engino::SDLGraphics::FillRect(const RectF& rect, const Color& color)
+{
+	SDL_Rect get_rect = { 0 };
+	get_rect.x = rect.x;
+	get_rect.y = rect.y;
+	get_rect.h = rect.h;
+	get_rect.w = rect.w;
+
+	SetColor(color);
+
+	SDL_RenderFillRect(renderer, &get_rect);
+}
+#pragma endregion FillRect
+
+#pragma region 
 
 size_t engino::SDLGraphics::LoadTexture(const char* filename)
 {
@@ -117,6 +151,9 @@ size_t engino::SDLGraphics::LoadFont(const char* filename, int fileSize)
 	}
 }
 
+#pragma endregion Loads
+
+#pragma region
 void engino::SDLGraphics::DrawSprite(int x, int y, int w, int h, int angle, size_t fileId) {
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -133,6 +170,41 @@ void engino::SDLGraphics::DrawSprite(int x, int y, int w, int h, int angle, size
 	SDL_RenderCopy(renderer, hashMap[fileId], image, pos);
 }
 
+void engino::SDLGraphics::DrawSprite(const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color, size_t fileId)
+{
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_Rect* image = new SDL_Rect();
+	image->w = src.w;
+	image->h = src.h;
+
+	SDL_Rect* pos = new SDL_Rect();
+	pos->x = dst.x;
+	pos->y = dst.y;
+	pos->w = dst.w;
+	pos->h = dst.h;
+
+	SDL_RenderCopy(renderer, hashMap[fileId], image, pos);
+}
+void engino::SDLGraphics::DrawSprite(const RectF& dst, const Color& color, size_t fileId)
+{
+}
+
+void engino::SDLGraphics::DrawSprite(const Color& color, size_t fileId)
+{
+}
+#pragma endregion DrawSprite
+
+#pragma region
+
+void engino::SDLGraphics::GetTextureSize(int* w, int* h)
+{
+}
+
+void engino::SDLGraphics::GetTextSize(const char* text, size_t fontId, int* w, int* h)
+{
+}
+
+#pragma endregion GetSizes
 
 SDL_Texture* g_TextureBuffer;
 void engino::SDLGraphics::DrawFont(int x, int y, int w, int h, size_t fontId, const char* text, const Color& color)
@@ -154,4 +226,9 @@ void engino::SDLGraphics::DrawFont(int x, int y, int w, int h, size_t fontId, co
 		SDL_FreeSurface(_surface);
 	}
 
+}
+
+void engino::SDLGraphics::Exit() {
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(Window);
 }

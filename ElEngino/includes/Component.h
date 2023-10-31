@@ -1,19 +1,29 @@
 #pragma once
 
+class Entity;
+
 class Component
 {
 public:
+	virtual ~Component() = default;
 	Component();
-	~Component();
-
-private:
-
+	Component(Entity* parent);
+	virtual void Start() {}
+	virtual void Destroy() {}
+protected:
+	Entity* m_Entity = nullptr;
 };
 
-Component::Component()
-{
-}
 
-Component::~Component()
+class IDrawable
 {
-}
+public:
+	virtual void Draw() = 0;
+};
+
+
+class IUpdatable {
+public:
+	virtual void Update() = 0;
+
+};

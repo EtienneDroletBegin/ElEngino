@@ -27,6 +27,7 @@ namespace engino {
 		void Start();
 		IInput& input() { return *m_input; }
 		IGraphics& gfx() { return *m_graphics; }
+		IWorld& wrld() { return *m_world; }
 		bool _isRunning() { return m_isRunning; }
 		void Stop() { m_isRunning = false; }
 	private:

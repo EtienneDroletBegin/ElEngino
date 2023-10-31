@@ -19,6 +19,10 @@ void engino::Entity::update(float dt)
 	if (Engine::Get()->input().IsKeyDown(EKeycodes::KEY_S)) {
 		m_y += 800 *dt;
 	}
+
+	for (auto c : m_components) {
+
+	}
 }
 
 void engino::Entity::start()
@@ -28,7 +32,15 @@ void engino::Entity::start()
 
 void engino::Entity::draw()
 {
+	for (auto c : m_components) {
+
+	}
+
 	Engine::Get()->gfx().DrawSprite(m_x, m_y, 696, 564, 0, m_spriteID);
 
+}
 
+void engino::Entity::Destroy()
+{
+	delete name;
 }

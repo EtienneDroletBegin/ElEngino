@@ -1,9 +1,7 @@
 #include "Engine.h"
 #include "Time.h"
 #include "Windows.h"
-#include <SDL.h>
 #include <iostream>
-#include "SDL_image.h";
 #include "Color.h";
 
 #include"SDLInputs.h"
@@ -82,7 +80,7 @@ void engino::Engine::Start() {
 
 }
 
-static const Uint8* _keystates = NULL;
+//static const Uint8* _keystates = NULL;
 void engino::Engine::ProccessInput(void)
 {
 	m_input->Update();
@@ -95,7 +93,7 @@ void engino::Engine::ProccessInput(void)
 void engino::Engine::Update(float dt)
 {
 #if _DEBUG
-	if (m_input->IsKeyDown(SDL_SCANCODE_ESCAPE)) {
+	if (m_input->IsKeyDown(EKeycodes::Key_Esc)) {
 		Stop();
 	}
 #endif
@@ -111,7 +109,7 @@ void engino::Engine::Draw()
 {
 	m_graphics->Clear();
 
-	m_graphics->DrawFont(0, 0, 200, 200, m_graphics->LoadFont("assets/Roboto-Regular.ttf", 160), "TEST", Color::RED);
+	//m_graphics->DrawFont(0, 0, 200, 200, m_graphics->LoadFont("assets/Roboto-Regular.ttf", 160), "TEST", Color::RED);
 	m_world->Draw();
 
 	m_graphics->Present();
@@ -126,8 +124,19 @@ void engino::Engine::Shutdown()
 	{
 		delete m_input;
 	}
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(Window);
+	if (m_mixer != nullptr)
+	{
+		delete m_mixer;
+	}
+	if (m_world != nullptr)
+	{
+		delete m_world;
+	}
+	m_graphics->Exit();
+	if (m_graphics != nullptr)
+	{
+		delete m_graphics;
+	}
 	FreeConsole();
-	SDL_Quit();
+	//SDL_Quit();
 }

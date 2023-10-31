@@ -1,4 +1,5 @@
 #include "mixer.h"
+#include "SDL_Mixer.h"
 
 engino::AudioMixer::AudioMixer()
 {

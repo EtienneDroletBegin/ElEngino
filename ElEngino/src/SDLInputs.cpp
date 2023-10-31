@@ -24,7 +24,8 @@ static int convert[] = {
 	SDL_SCANCODE_D,
 	SDL_SCANCODE_S,
 	SDL_SCANCODE_W,
-	SDL_SCANCODE_ESCAPE
+	SDL_SCANCODE_ESCAPE,
+	SDL_SCANCODE_SPACE
 };
 bool SdlInput::IsKeyDown(int keycode)
 {
