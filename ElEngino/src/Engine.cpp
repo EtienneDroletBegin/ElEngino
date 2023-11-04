@@ -3,7 +3,6 @@
 #include "Windows.h"
 #include <iostream>
 #include "Color.h";
-
 #include"SDLInputs.h"
 #include"SDLGraphics.h"
 #include"mixer.h"

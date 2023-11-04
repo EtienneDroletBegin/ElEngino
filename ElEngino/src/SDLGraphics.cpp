@@ -154,20 +154,22 @@ size_t engino::SDLGraphics::LoadFont(const char* filename, int fileSize)
 #pragma endregion Loads
 
 #pragma region
-void engino::SDLGraphics::DrawSprite(int x, int y, int w, int h, int angle, size_t fileId) {
+void engino::SDLGraphics::DrawSprite(int x, int y, int w, int h, double angle, size_t fileId) {
 
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_Rect* image = new SDL_Rect();
-	image->w = w;
-	image->h = h;
+	//SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	RectI image = RectI();
+	image.w = w;
+	image.h = h;
 
-	SDL_Rect* pos = new SDL_Rect();
-	pos->x = x;
-	pos->y = y;
-	pos->w = 100;
-	pos->h = 100;
+	RectF pos = RectF();
+	pos.x = x;
+	pos.y = y;
+	pos.w = 100;
+	pos.h = 100;
 
-	SDL_RenderCopy(renderer, hashMap[fileId], image, pos);
+	//SDL_RenderCopy(renderer, hashMap[fileId], &image, &pos);
+	Flip f = { 0 };
+	DrawSprite(image, pos, 0, f, Color(255, 255, 255, 255), fileId);
 }
 
 void engino::SDLGraphics::DrawSprite(const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color, size_t fileId)
@@ -198,6 +200,7 @@ void engino::SDLGraphics::DrawSprite(const Color& color, size_t fileId)
 
 void engino::SDLGraphics::GetTextureSize(int* w, int* h)
 {
+	
 }
 
 void engino::SDLGraphics::GetTextSize(const char* text, size_t fontId, int* w, int* h)

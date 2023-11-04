@@ -5,6 +5,7 @@
 #include "iGraphics.h"
 #include "IAudio.h"
 #include "IWorld.h"
+#include "Entity.h"
 #include<string>
 
 namespace engino {

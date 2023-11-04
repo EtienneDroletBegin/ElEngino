@@ -1,6 +1,7 @@
 #pragma once
-#include "Entity.h"
+//#include "Entity.h"
 namespace engino {
+	class Entity;
 	class Component
 	{
 	public:

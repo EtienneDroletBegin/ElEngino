@@ -4,7 +4,7 @@
 #include "Engine.h"
 #include "gameScene.h"
 #include "UIScene.h"
-//#include <vld.h>
+#include <vld.h>
 
 using namespace engino;
 void initGamePlay() {

@@ -1,9 +1,7 @@
 #pragma once
-
 #include "IWorld.h";
 #include "Entity.h";
 #include "IScenes.h";
-
 #include <vector>
 #include <map>
 #include <string>

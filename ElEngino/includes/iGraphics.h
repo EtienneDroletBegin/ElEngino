@@ -49,7 +49,7 @@ namespace engino {
 
 		virtual size_t LoadFont(const char* filename, int fileSize) = 0;
 		virtual void DrawFont(int x, int y, int w, int h, size_t fontId, const char* text, const Color& color) = 0;
-		virtual void DrawSprite(int x, int y, int w, int h, int angle, size_t fileId) = 0;
+		virtual void DrawSprite(int x, int y, int w, int h, double angle, size_t fileId) = 0;
 		virtual void DrawSprite(const RectI& src, const RectF& dst,
 			double angle, const Flip& flip, const Color& color, size_t fileId) = 0;
 		virtual void DrawSprite(const RectF& dst, const Color& color, size_t fileId) = 0;

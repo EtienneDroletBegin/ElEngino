@@ -6,8 +6,9 @@ namespace engino {
 	class PlayerController : public Component, public IUpdatable
 	{
 	public:
-		PlayerController() {};
-		~PlayerController();
+		PlayerController(Entity* parent) :Component(parent) {};
+		PlayerController() = default;
+		~PlayerController() = default;
 		virtual void Update(float dt) override;
 
 
