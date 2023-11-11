@@ -15,6 +15,7 @@ namespace engino {
 		virtual void SetVolume(int volume) = 0;
 		virtual void SetVolume(size_t soundId, int volume) = 0;
 
+
 	};
 
 }
