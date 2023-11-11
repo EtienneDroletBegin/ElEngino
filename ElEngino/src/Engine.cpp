@@ -2,7 +2,7 @@
 #include "Time.h"
 #include "Windows.h"
 #include <iostream>
-#include "Color.h";
+#include "Color.h"
 #include"SDLInputs.h"
 #include"SDLGraphics.h"
 #include"mixer.h"
@@ -15,7 +15,11 @@ static SDL_Window* Window = NULL;
 #define MS_PER_FRAME 16.666f
 
 
-engino::Engine::Engine()
+engino::Engine::Engine() :m_graphics(nullptr),
+m_input(nullptr),
+m_log(nullptr),
+m_mixer(nullptr),
+m_world(nullptr)
 {
 
 }
@@ -57,11 +61,11 @@ void engino::Engine::Start() {
 
 	clock_t _end = clock();
 	m_world->Start();
-	m_mixer->PlaySFX(m_mixer->LoadSound("assets/loaded.wav"), 0);
+	//m_mixer->PlaySFX(m_mixer->LoadSound("assets/loaded.wav"), 0);
 	
 	while (m_isRunning && !m_input->_quit()) {
 		const clock_t _start = clock();
-		float dt = (_start - _end) * 0.001;
+		double dt = (_start - _end) * 0.001;
 		ProccessInput();
 		Update(dt);
 		Draw();
@@ -70,7 +74,7 @@ void engino::Engine::Start() {
 		float elapsedMS = _end -(_start + MS_PER_FRAME);
 		if (elapsedMS > 0)
 		{
-			Sleep(elapsedMS * 0.001f);
+			Sleep(elapsedMS * 0.001);
 
 		}
 		_end = _start;
@@ -136,6 +140,6 @@ void engino::Engine::Shutdown()
 	{
 		delete m_graphics;
 	}
-	FreeConsole();
+
 	//SDL_Quit();
 }

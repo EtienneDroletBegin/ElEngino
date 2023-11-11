@@ -28,5 +28,8 @@ void engino::Entity::draw()
 
 void engino::Entity::Destroy()
 {
-	delete name;
+	for (auto c : m_Components) {
+		c.second->Destroy();
+		delete c.second;
+	}
 }

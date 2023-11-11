@@ -14,8 +14,9 @@ namespace engino {
 	class Entity final
 	{
 	public:
-		Entity(const char* _name):name(_name), m_x(0),m_y(0)
+		Entity(const char* _name, float x, float y):name(_name), m_x(x),m_y(y)
 		{
+
 		};
 
 		virtual void update(float dt) ;
@@ -24,13 +25,14 @@ namespace engino {
 		virtual void Destroy();
 
 		virtual const std::string getName() { return name; };
-		virtual void setPos(int x, int y) { m_x = x; m_y = y; }
+		virtual void setPos(float x, float y) { m_x = x; m_y = y; }
 		virtual float GetX() { return m_x; }
 		virtual float GetY() { return m_y; }
 		virtual void SetX(float x) { m_x += x; }
 		virtual void SetY(float y) { m_y += y; }
+		void onCollision(Entity* other);
 
-		template <typename T> void AddComponent() {
+		template <typename T> T* AddComponent() {
 			T* cmp = new T(this);
 			const type_info* type = &typeid(*cmp);
 			IUpdatable* updatable = dynamic_cast<IUpdatable*>(cmp);
@@ -43,8 +45,24 @@ namespace engino {
 				m_drawable.push_back(drawable);
 			}
 			m_Components[type] = cmp;
-
+			cmp->Start();
+			return cmp;
 		}
+
+		template <typename T> T* GetComponent() {
+			const std::type_info* typeInfo = &typeid(T);
+
+			auto it = m_Components.find(typeInfo);
+			if (it != m_Components.end()) {
+				// Return the component pointer if found
+				return dynamic_cast<T*>(it->second);
+			}
+			else {
+				// Return nullptr if the component is not found
+				return nullptr;
+			}
+		}
+
 
 	private:
 		

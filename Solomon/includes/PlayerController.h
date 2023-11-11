@@ -13,6 +13,7 @@ namespace engino {
 
 
 	private:
+		void FireBall();
 
 	};
 

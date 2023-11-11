@@ -12,8 +12,25 @@ void  SdlInput::Update()
 		case SDL_QUIT:
 			quit = true;
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			SDL_MouseButtonEvent _buttonDown = _event.button;
+			m_MouseStates[_buttonDown.button] = true;
+			break;
 
-		default:
+		case SDL_MOUSEBUTTONUP:
+			SDL_MouseButtonEvent _buttonUp = _event.button;
+			m_MouseStates[_buttonUp.button] = true;
+			break;
+
+		case SDL_MOUSEMOTION:
+			SDL_MouseMotionEvent _motion = _event.motion;
+			m_MouseX = _motion.x;
+			m_MouseY = _motion.y;
+			break;
+
+		case SDL_KEYUP:
+		case SDL_KEYDOWN:
+			m_KeyStates = SDL_GetKeyboardState(nullptr);
 			break;
 		}
 	}
@@ -25,7 +42,10 @@ static int convert[] = {
 	SDL_SCANCODE_S,
 	SDL_SCANCODE_W,
 	SDL_SCANCODE_ESCAPE,
-	SDL_SCANCODE_SPACE
+	SDL_SCANCODE_SPACE,
+	SDL_SCANCODE_R,
+	SDL_SCANCODE_T,
+	SDL_SCANCODE_Y,
 };
 bool SdlInput::IsKeyDown(int keycode)
 {

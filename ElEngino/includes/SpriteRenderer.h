@@ -1,24 +1,21 @@
+#pragma once
 #include "Component.h"
 #include "IUpdatable.h"
 #include "IDrawable.h"
-
 
 namespace engino {
 	class SpriteRenderer : public Component, public IDrawable
 	{
 	public:
-		void Init();
+		void Init(const char* filename);
 		SpriteRenderer(Entity* parent):Component(parent) {
-			Init();
+			m_spriteID = 0;
 		}
 		SpriteRenderer() = default;
 		~SpriteRenderer()= default;
 		virtual void Draw() override;
 
-
-	private:
-		const char* filename;
+	protected:
 		size_t m_spriteID;
 	};
-
 }

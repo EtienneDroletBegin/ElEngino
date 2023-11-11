@@ -1,23 +1,27 @@
 #include "WorldService.h"
 #include "SDL_ttf.h"
 #include "IScenes.h"
+#include "Engine.h"
+#include <iostream>
 
 
-//Entity* engino::WorldService::Find(const std::string& name)
-//{
-//	if (m_entityMap.count(name) > 0)
-//	{
-//		return m_entityMap[name];
-//	}
-//}
-
-engino::WorldService::WorldService()
+engino::Entity* engino::WorldService::Find(const char* name)
 {
-	
+	if (m_entityMap.count(name) > 0)
+	{
+		return m_entityMap[name];
+	}
+	else {
+		return nullptr;
+	}
 }
+
 
 engino::WorldService::~WorldService()
 {
+	Unload();
+	delete m_CurrentScene;
+	m_colliders.clear();
 }
 
 void engino::WorldService::Load(const char* scene)
@@ -26,8 +30,8 @@ void engino::WorldService::Load(const char* scene)
 		Unload();
 		m_CurrentScene = m_scenes[scene];
 		m_CurrentScene->Load();
+		
 	}
-
 }
 
 void engino::WorldService::Register(const char* name, IScenes* scene)
@@ -45,10 +49,12 @@ void engino::WorldService::Unload()
 			entity->Destroy();
 			delete entity;
 		}
-		m_entitiesInWorld.clear();
 		m_entityMap.clear();
+		m_entitiesInWorld.clear();
 	}
 }
+
+
 
 void engino::WorldService::Add(Entity* added)
 {
@@ -56,9 +62,9 @@ void engino::WorldService::Add(Entity* added)
 	m_entityMap.emplace(added->getName(), added);
 }
 
-engino::Entity* engino::WorldService::Create(const char* name)
+engino::Entity* engino::WorldService::Create(const char* name, float x = 0, float y = 0)
 {
-	Entity* _e = new Entity(name);
+	Entity* _e = new Entity(name, x, y);
 	Add(_e);
 	_e->start();
 	return _e;
@@ -71,10 +77,10 @@ void engino::WorldService::Remove(Entity* entity)
 	{
 		if (*it == entity) {
 			m_entitiesInWorld.erase(it);
+			delete entity;
 			break;
 		}
 	}
-
 	m_entityMap.erase(entity->getName());
 }
 
@@ -94,6 +100,11 @@ void engino::WorldService::Update(float dt)
 	{
 		m_entitiesInWorld[i]->update(dt);
 	}
+}
+
+void engino::WorldService::AddCollider(Colliders* col)
+{
+	m_colliders.push_back(col);
 }
 
 void engino::WorldService::Draw()

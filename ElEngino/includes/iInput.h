@@ -6,7 +6,10 @@ namespace engino {
 		KEY_S,
 		KEY_W,
 		Key_Esc,
-		Key_Space
+		Key_Space,
+		Key_R,
+		Key_T,
+		Key_Y
 	};
 class IInput
 {

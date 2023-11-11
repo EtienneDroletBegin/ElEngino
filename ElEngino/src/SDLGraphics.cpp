@@ -8,17 +8,10 @@
 using namespace engino;
 
 
-
-engino::SDLGraphics::SDLGraphics()
-{
-
-
-	
-}
-
 engino::SDLGraphics::~SDLGraphics()
 {
 	TTF_Quit();
+
 }
 
 void engino::SDLGraphics::SetColor(const Color& color)
@@ -63,12 +56,14 @@ bool engino::SDLGraphics::Initialize(const char* name, int w, int h)
 	return true; 
 }
 
-void engino::SDLGraphics::Drawline(float x1, float y1, float x2, float y2)
+
+void engino::SDLGraphics::Drawline(int x1, int y1, int x2, int y2)
 {
 	SDL_RenderDrawLine(renderer, x1,y1,x2,y2);
 }
 
 #pragma region
+
 void engino::SDLGraphics::DrawRect(int x, int y, int w, int h)
 {
 	SDL_Rect get_rect = { 0 };
@@ -80,7 +75,8 @@ void engino::SDLGraphics::DrawRect(int x, int y, int w, int h)
 	SDL_RenderDrawRect(renderer, &get_rect);
 }
 
-void engino::SDLGraphics::DrawRect(const RectF& rect, const Color& color)
+
+void engino::SDLGraphics::DrawRect(const RectI& rect, const Color& color)
 {
 	SDL_Rect get_rect = { 0 };
 	get_rect.x = rect.x;
@@ -95,6 +91,7 @@ void engino::SDLGraphics::DrawRect(const RectF& rect, const Color& color)
 #pragma endregion DrawRect
 
 #pragma region
+
 void engino::SDLGraphics::FillRect(int x, int y, int w, int h)
 {
 	SDL_Rect get_rect = { 0 };
@@ -105,6 +102,7 @@ void engino::SDLGraphics::FillRect(int x, int y, int w, int h)
 
 	SDL_RenderFillRect(renderer, &get_rect);
 }
+
 
 void engino::SDLGraphics::FillRect(const RectF& rect, const Color& color)
 {
@@ -122,8 +120,10 @@ void engino::SDLGraphics::FillRect(const RectF& rect, const Color& color)
 
 #pragma region 
 
+
 size_t engino::SDLGraphics::LoadTexture(const char* filename)
 {
+
 	const size_t textureId = std::hash<std::string>()(filename);
 
 	if (hashMap.find(textureId) != hashMap.end()) {
@@ -137,7 +137,8 @@ size_t engino::SDLGraphics::LoadTexture(const char* filename)
 	}
 }
 
-size_t engino::SDLGraphics::LoadFont(const char* filename, int fileSize)
+
+size_t engino::SDLGraphics::LoadFont(const char* filename, float fileSize)
 {
 	const size_t fontId = std::hash<std::string>()(filename);
 
@@ -154,6 +155,8 @@ size_t engino::SDLGraphics::LoadFont(const char* filename, int fileSize)
 #pragma endregion Loads
 
 #pragma region
+
+
 void engino::SDLGraphics::DrawSprite(int x, int y, int w, int h, double angle, size_t fileId) {
 
 	//SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -161,7 +164,7 @@ void engino::SDLGraphics::DrawSprite(int x, int y, int w, int h, double angle, s
 	image.w = w;
 	image.h = h;
 
-	RectF pos = RectF();
+	RectI pos = RectI();
 	pos.x = x;
 	pos.y = y;
 	pos.w = 100;
@@ -172,20 +175,22 @@ void engino::SDLGraphics::DrawSprite(int x, int y, int w, int h, double angle, s
 	DrawSprite(image, pos, 0, f, Color(255, 255, 255, 255), fileId);
 }
 
-void engino::SDLGraphics::DrawSprite(const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color, size_t fileId)
+void engino::SDLGraphics::DrawSprite(const RectI& src, const RectI& dst, double angle, const Flip& flip, const Color& color, size_t fileId)
 {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_Rect* image = new SDL_Rect();
-	image->w = src.w;
-	image->h = src.h;
+	SDL_Rect image = { 0 };
+	image.w = src.w;
+	image.h = src.h;
+	image.x = src.x;
+	image.y = src.y;
 
-	SDL_Rect* pos = new SDL_Rect();
-	pos->x = dst.x;
-	pos->y = dst.y;
-	pos->w = dst.w;
-	pos->h = dst.h;
+	SDL_Rect pos = {0};
+	pos.x = dst.x;
+	pos.y = dst.y;
+	pos.w = dst.w;
+	pos.h = dst.h;
 
-	SDL_RenderCopy(renderer, hashMap[fileId], image, pos);
+	SDL_RenderCopy(renderer, hashMap[fileId], &image, &pos);
 }
 void engino::SDLGraphics::DrawSprite(const RectF& dst, const Color& color, size_t fileId)
 {
@@ -198,40 +203,71 @@ void engino::SDLGraphics::DrawSprite(const Color& color, size_t fileId)
 
 #pragma region
 
-void engino::SDLGraphics::GetTextureSize(int* w, int* h)
+void engino::SDLGraphics::GetTextureSize(int* w, int* h, size_t id)
 {
-	
+	if (hashMap.count(id) > 0)
+	{
+		SDL_QueryTexture(hashMap[id], nullptr, nullptr, w, h);
+	}
+	else
+	{
+		*w = 0;
+		*h = 0;
+	}
 }
 
 void engino::SDLGraphics::GetTextSize(const char* text, size_t fontId, int* w, int* h)
 {
+	if (FontHash.count(fontId) > 0)
+	{
+		TTF_SizeText(FontHash[fontId], text, w, h);
+	}
+	else
+	{
+		*w = 0;
+		*h = 0;
+	}
 }
+
 
 #pragma endregion GetSizes
 
 SDL_Texture* g_TextureBuffer;
-void engino::SDLGraphics::DrawFont(int x, int y, int w, int h, size_t fontId, const char* text, const Color& color)
+/// <summary>
+/// draws text on the screen
+/// </summary>
+/// <param name="x">the x</param>
+/// <param name="y">the y</param>
+/// <param name="w">the width</param>
+/// <param name="h">the height</param>
+/// <param name="fontId">the font's id aquired through loadFont</param>
+/// <param name="text">the text to display</param>
+/// <param name="color">the color of the text</param>
+/// <param name="scale">how big to scale.</param>
+void engino::SDLGraphics::DrawFont(int x, int y, int w, int h, size_t fontId, const char* text, const Color& color, float scale)
 {
+
 	if (FontHash.count(fontId) > 0)
 	{
 		SDL_Color _color = { color.red, color.green, color.blue, color.alpha };
 		TTF_Font* _font = FontHash[fontId];
 
-		SDL_Rect* pos = new SDL_Rect();
-		pos->x = x;
-		pos->y = y;
-		TTF_SizeText(_font, text, &pos->w,&pos->h);
-		
+		SDL_Rect pos = {0};
+		pos.x = x;
+		pos.y = y;
+		TTF_SizeText(_font, text, &pos.w,&pos.h);
+		pos.w *= scale;
+		pos.h *= scale;
 
 		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text, _color);
 		g_TextureBuffer = SDL_CreateTextureFromSurface(renderer, _surface);
-		SDL_RenderCopy(renderer, g_TextureBuffer, nullptr, pos);
+		SDL_RenderCopy(renderer, g_TextureBuffer, nullptr, &pos);
 		SDL_FreeSurface(_surface);
 	}
-
 }
 
 void engino::SDLGraphics::Exit() {
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(Window);
 }

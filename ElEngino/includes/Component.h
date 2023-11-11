@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 //#include "Entity.h"
 namespace engino {
 	class Entity;
@@ -10,8 +11,8 @@ namespace engino {
 		Component() = default;
 		virtual void Start() {}
 		virtual void Destroy() {}
-	protected:
 		Entity* m_Entity = nullptr;
+	protected:
 	};
 
 }

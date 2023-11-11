@@ -13,33 +13,33 @@ namespace engino {
 
 	{
 	public:
-		SDLGraphics();
+		SDLGraphics()=default;
 		~SDLGraphics();
 		virtual void SetColor(const Color& color) override;
 		virtual void Clear() override;
 		virtual void Present() override;
 		virtual bool Initialize(const char* name, int w, int h) override;
 
-		virtual void Drawline(float x1, float y1, float x2, float y2) override;
+		virtual void Drawline(int x1, int y1, int x2, int y2) override;
 		virtual void DrawRect(int x, int y, int w, int h) override;
-		virtual void DrawRect(const RectF& rect, const Color& color) override;
+		virtual void DrawRect(const RectI& rect, const Color& color) override;
 
 		virtual void FillRect(int x, int y, int w, int h) override;
 		virtual void FillRect(const RectF& rect, const Color& color) override;
 
 		virtual size_t LoadTexture(const char* filename) override;
-		virtual size_t LoadFont(const char* filename, int fileSize) override;
+		virtual size_t LoadFont(const char* filename, float fileSize) override;
 
 		virtual void DrawSprite(int x, int y, int w, int h, double angle, size_t fileId) override;
-		virtual void DrawSprite(const RectI& src, const RectF& dst,
+		virtual void DrawSprite(const RectI& src, const RectI& dst,
 			double angle, const Flip& flip, const Color& color, size_t fileId) override;
 		virtual void DrawSprite(const RectF& dst, const Color& color, size_t fileId) override;
 		virtual void DrawSprite(const Color& color, size_t fileId) override;
 
-		virtual void GetTextureSize(int* w, int* h) override;
-		virtual void GetTextSize(const char* text, size_t fontId, int* w, int* h) override;
+		virtual void GetTextureSize(int* w, int* h, size_t id) override;
+		virtual void GetTextSize(const char* text, size_t fontId, int* w, int* h);
 
-		virtual void DrawFont(int x, int y, int w, int h, size_t fontId, const char* text, const Color& color) override;
+		virtual void DrawFont(int x, int y, int w, int h, size_t fontId, const char* text, const Color& color, float scale) override;
 		virtual void Exit() override;
 
 
