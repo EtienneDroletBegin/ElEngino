@@ -1,5 +1,5 @@
-#include "ConsoleLogger.h";
-#include "SDL.h";
+#include "ConsoleLogger.h"
+#include "SDL.h"
 #include <iostream>
 #include <Windows.h>
 
@@ -9,17 +9,17 @@ engino::ConsoleLogger::ConsoleLogger() {
 	HANDLE hconsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hconsole, 12);
 }
-
-engino::ConsoleLogger::~ConsoleLogger() {
-	FreeConsole();
-}
-
-void engino::ConsoleLogger::Log(const char* message)
+void engino::ConsoleLogger::Log(std::string message)
 {
 	//std::cout << "ERROR: " << message << std::endl;
 }
 
-const char* engino::ConsoleLogger::GetError()
+std::string engino::ConsoleLogger::GetError()
 {
 	return SDL_GetError();
+}
+
+void engino::ConsoleLogger::Shutdown()
+{
+	FreeConsole();
 }

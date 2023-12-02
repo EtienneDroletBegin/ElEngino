@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Color.h"
+#include <string>
 struct SDL_Texture;
 
 struct RectI
@@ -47,7 +48,7 @@ namespace engino {
 		/// <param name="w">the width of the window</param>
 		/// <param name="h">the width of the window</param>
 		/// <returns></returns>
-		virtual bool Initialize(const char* name, int w, int h)= 0;
+		virtual bool Initialize(std::string name, int w, int h)= 0;
 		/// <summary>
 		/// draws a line from point a to point b
 		/// </summary>
@@ -77,7 +78,7 @@ namespace engino {
 		/// <param name="y">the y</param>
 		/// <param name="w">the width</param>
 		/// <param name="h">the height</param>
-		virtual void FillRect(const RectF& rect, const Color& color) = 0;
+		virtual void FillRect(const RectI& rect, const Color& color) = 0;
 		/// <summary>
 		/// draws a filled rect
 		/// </summary>
@@ -89,14 +90,14 @@ namespace engino {
 		/// </summary>
 		/// <param name="filename">the path of the file to find</param>
 		/// <returns>returns the texture's id</returns>
-		virtual size_t LoadTexture(const char* filename) = 0;
+		virtual size_t LoadTexture(std::string filename) = 0;
 		/// <summary>
 		/// creates a SDL_Font
 		/// </summary>
 		/// <param name="filename">the path of the file to find</param>
 		/// <param name="fileSize">the size</param>
 		/// <returns></returns>
-		virtual size_t LoadFont(const char* filename, float fileSize) = 0;
+		virtual size_t LoadFont(std::string filename, int fileSize) = 0;
 		/// <summary>
 		/// draws a sprite
 		/// </summary>
@@ -106,7 +107,7 @@ namespace engino {
 		/// <param name="h">the h</param>
 		/// <param name="angle">the angle of the sprite</param>
 		/// <param name="fileId">the file's id (aquired through loadSprite)</param>
-		virtual void DrawFont(int x, int y, int w, int h, size_t fontId, const char* text, const Color& color, float scale) = 0;
+		virtual void DrawFont(float x, float y, int w, int h, size_t fontId, std::string text, const Color& color, int scale) = 0;
 		/// <summary>
 		/// draws a sprite
 		/// </summary>
@@ -116,14 +117,27 @@ namespace engino {
 		/// <param name="flip">is the sprite flipped</param>
 		/// <param name="color">the color</param>
 		/// <param name="fileId">the file's id (aquired through loadSprite)</param>
-		virtual void DrawSprite(int x, int y, int w, int h, double angle, size_t fileId) = 0;
-		virtual void DrawSprite(const RectI& src, const RectI& dst,
+		virtual void DrawSprite(float x, float y, float w, float h, double angle, size_t fileId) = 0;
+		virtual void DrawSprite(const RectI& src, const RectF& dst,
 			double angle, const Flip& flip, const Color& color, size_t fileId) = 0;
 		virtual void DrawSprite(const RectF& dst, const Color& color, size_t fileId) = 0;
 		virtual void DrawSprite(const Color& color, size_t fileId) = 0;
 
+		/// <summary>
+		/// sets the correct metrics for the given image
+		/// </summary>
+		/// <param name="w">pointer to the width</param>
+		/// <param name="h">pointer to the height</param>
+		/// <param name="id">the texture's id in the hash</param>
 		virtual void GetTextureSize(int* w, int* h, size_t id) = 0;
-		virtual void GetTextSize(const char* text, size_t fontId, int* w, int* h) = 0;
+		/// <summary>
+		/// sets the correct box size for the given text
+		/// </summary>
+		/// <param name="text">the text to write</param>
+		/// <param name="fontId">the loaded font</param>
+		/// <param name="w">the pointer to the width</param>
+		/// <param name="h">the pointer to the height</param>
+		virtual void GetTextSize(std::string text, size_t fontId, int* w, int* h) = 0;
 		virtual void Exit() = 0;
 	};
 

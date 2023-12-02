@@ -6,20 +6,21 @@ engino::FileLogger::FileLogger() : LogNumber(0)
 	MyFile.open("ErrorLog.txt");
 }
 
-engino::FileLogger::~FileLogger()
-{
-	MyFile.close();
-}
 
-void engino::FileLogger::Log(const char* message)
+void engino::FileLogger::Log(std::string message)
 {
 	MyFile << LogNumber << " " << message << std::endl;
 	LogNumber++;
 }
 
-const char* engino::FileLogger::GetError()
+std::string engino::FileLogger::GetError()
 {
 	return SDL_GetError();
+}
+
+void engino::FileLogger::Shutdown()
+{
+	MyFile.close();
 }
 
 

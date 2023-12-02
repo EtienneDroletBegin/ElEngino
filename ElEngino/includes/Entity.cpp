@@ -6,6 +6,7 @@
 using namespace engino;
 
 
+
 void engino::Entity::update(float dt)
 {
 	for (auto c : m_updatable) {
@@ -28,8 +29,12 @@ void engino::Entity::draw()
 
 void engino::Entity::Destroy()
 {
-	for (auto c : m_Components) {
-		c.second->Destroy();
-		delete c.second;
-	}
+    for (auto it : m_Components)
+    {
+		delete it.second;
+    }
+
+    m_Components.clear();
+    m_updatable.clear();
+    m_drawable.clear();
 }

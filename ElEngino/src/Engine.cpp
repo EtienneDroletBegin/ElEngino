@@ -32,7 +32,7 @@ m_world(nullptr)
 /// <param name="w">the width of the window opened</param>
 /// <param name="h">the height of the open window</param>
 /// <returns></returns>
-bool engino::Engine::Init(const char* name, int w, int h) {
+bool engino::Engine::Init(std::string name, int w, int h) {
 	m_log = new ConsoleLogger();
 	//m_log = new FileLogger();
 
@@ -65,7 +65,7 @@ void engino::Engine::Start() {
 	
 	while (m_isRunning && !m_input->_quit()) {
 		const clock_t _start = clock();
-		double dt = (_start - _end) * 0.001;
+		float dt = (_start - _end) * 0.001f;
 		ProccessInput();
 		Update(dt);
 		Draw();
@@ -74,7 +74,7 @@ void engino::Engine::Start() {
 		float elapsedMS = _end -(_start + MS_PER_FRAME);
 		if (elapsedMS > 0)
 		{
-			Sleep(elapsedMS * 0.001);
+			Sleep(static_cast<DWORD>(elapsedMS * 0.001));
 
 		}
 		_end = _start;
@@ -123,22 +123,29 @@ void engino::Engine::Draw()
 /// </summary>
 void engino::Engine::Shutdown()
 {
+	if (m_world != nullptr)
+	{
+		m_world->Exit();
+		delete m_world;
+	}	
 	if (m_input != nullptr)
 	{
 		delete m_input;
 	}
 	if (m_mixer != nullptr)
 	{
+		m_mixer->Destroy();
 		delete m_mixer;
 	}
-	if (m_world != nullptr)
-	{
-		delete m_world;
-	}
-	m_graphics->Exit();
 	if (m_graphics != nullptr)
 	{
+		m_graphics->Exit();
 		delete m_graphics;
+	}
+	if (m_log != nullptr)
+	{
+		m_log->Shutdown();
+		delete m_log;
 	}
 
 	//SDL_Quit();

@@ -8,7 +8,12 @@ namespace engino {
 	{
 	public:
 		virtual void Load() override;
-		virtual void Update() override;
+		virtual void Update(float dt) override;
+
+	private:
+		bool canStart=false;
+		bool ticking = true;
+		float startTime=0;
 	};
 
 }

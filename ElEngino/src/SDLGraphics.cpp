@@ -5,14 +5,8 @@
 #include <iostream>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+
 using namespace engino;
-
-
-engino::SDLGraphics::~SDLGraphics()
-{
-	TTF_Quit();
-
-}
 
 void engino::SDLGraphics::SetColor(const Color& color)
 {
@@ -31,7 +25,7 @@ void engino::SDLGraphics::Present()
 	SDL_RenderPresent(renderer);
 }
 
-bool engino::SDLGraphics::Initialize(const char* name, int w, int h)
+bool engino::SDLGraphics::Initialize(std::string name, int w, int h)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 
@@ -40,7 +34,7 @@ bool engino::SDLGraphics::Initialize(const char* name, int w, int h)
 	int _x = SDL_WINDOWPOS_CENTERED;
 	int _y = SDL_WINDOWPOS_CENTERED;
 	Uint32 _flag = SDL_WINDOW_TOOLTIP;
-	Window = SDL_CreateWindow(name, _x, _y, w, h, _flag);
+	Window = SDL_CreateWindow(name.c_str(), _x, _y, w, h, _flag);
 
 	_flag = SDL_RENDERER_ACCELERATED;
 	renderer = SDL_CreateRenderer(Window, -1, _flag);
@@ -104,7 +98,7 @@ void engino::SDLGraphics::FillRect(int x, int y, int w, int h)
 }
 
 
-void engino::SDLGraphics::FillRect(const RectF& rect, const Color& color)
+void engino::SDLGraphics::FillRect(const RectI& rect, const Color& color)
 {
 	SDL_Rect get_rect = { 0 };
 	get_rect.x = rect.x;
@@ -121,35 +115,38 @@ void engino::SDLGraphics::FillRect(const RectF& rect, const Color& color)
 #pragma region 
 
 
-size_t engino::SDLGraphics::LoadTexture(const char* filename)
+size_t engino::SDLGraphics::LoadTexture(std::string filename)
 {
 
 	const size_t textureId = std::hash<std::string>()(filename);
 
-	if (hashMap.find(textureId) != hashMap.end()) {
+	if (hashMap->find(textureId) != hashMap->end()) {
 		return textureId;
 	}
 
-	SDL_Texture* loadedTexture = IMG_LoadTexture(renderer, filename);
+	SDL_Texture* loadedTexture = IMG_LoadTexture(renderer, filename.c_str());
 	if (loadedTexture != nullptr) {
-		hashMap[textureId] = loadedTexture;
+		hashMap->emplace(textureId, loadedTexture);
 		return textureId;
 	}
+	return -1;
 }
 
 
-size_t engino::SDLGraphics::LoadFont(const char* filename, float fileSize)
+size_t engino::SDLGraphics::LoadFont(std::string filename, int fileSize)
 {
 	const size_t fontId = std::hash<std::string>()(filename);
 
-	if (FontHash.find(fontId) != FontHash.end()) {
+	if (FontHash->find(fontId) != FontHash->end()) {
 		return fontId;
 	}
-	TTF_Font* _font = TTF_OpenFont(filename, fileSize);
+	TTF_Font* _font = TTF_OpenFont(filename.c_str(), fileSize);
 	if (_font != nullptr) {
-		FontHash[fontId] = _font;
+		FontHash->emplace(fontId, _font);
 		return fontId;
 	}
+
+	return -1;
 }
 
 #pragma endregion Loads
@@ -157,25 +154,25 @@ size_t engino::SDLGraphics::LoadFont(const char* filename, float fileSize)
 #pragma region
 
 
-void engino::SDLGraphics::DrawSprite(int x, int y, int w, int h, double angle, size_t fileId) {
+void engino::SDLGraphics::DrawSprite(float x, float y, float w, float h, double angle, size_t fileId) {
 
 	//SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	RectI image = RectI();
-	image.w = w;
-	image.h = h;
+	image.w = (int)w;
+	image.h = (int)h;
 
-	RectI pos = RectI();
+	RectF pos = RectF();
 	pos.x = x;
 	pos.y = y;
-	pos.w = 100;
-	pos.h = 100;
+	pos.w = w;
+	pos.h = h;
 
 	//SDL_RenderCopy(renderer, hashMap[fileId], &image, &pos);
 	Flip f = { 0 };
 	DrawSprite(image, pos, 0, f, Color(255, 255, 255, 255), fileId);
 }
 
-void engino::SDLGraphics::DrawSprite(const RectI& src, const RectI& dst, double angle, const Flip& flip, const Color& color, size_t fileId)
+void engino::SDLGraphics::DrawSprite(const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color, size_t fileId)
 {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_Rect image = { 0 };
@@ -185,12 +182,12 @@ void engino::SDLGraphics::DrawSprite(const RectI& src, const RectI& dst, double 
 	image.y = src.y;
 
 	SDL_Rect pos = {0};
-	pos.x = dst.x;
-	pos.y = dst.y;
-	pos.w = dst.w;
-	pos.h = dst.h;
+	pos.x = (int)dst.x;
+	pos.y = (int)dst.y;
+	pos.w = (int)dst.w;
+	pos.h = (int)dst.h;
 
-	SDL_RenderCopy(renderer, hashMap[fileId], &image, &pos);
+	SDL_RenderCopy(renderer, hashMap->at(fileId), &image, &pos);
 }
 void engino::SDLGraphics::DrawSprite(const RectF& dst, const Color& color, size_t fileId)
 {
@@ -205,9 +202,9 @@ void engino::SDLGraphics::DrawSprite(const Color& color, size_t fileId)
 
 void engino::SDLGraphics::GetTextureSize(int* w, int* h, size_t id)
 {
-	if (hashMap.count(id) > 0)
+	if (hashMap->count(id) > 0)
 	{
-		SDL_QueryTexture(hashMap[id], nullptr, nullptr, w, h);
+		SDL_QueryTexture(hashMap->at(id), nullptr, nullptr, w, h);
 	}
 	else
 	{
@@ -216,11 +213,11 @@ void engino::SDLGraphics::GetTextureSize(int* w, int* h, size_t id)
 	}
 }
 
-void engino::SDLGraphics::GetTextSize(const char* text, size_t fontId, int* w, int* h)
+void engino::SDLGraphics::GetTextSize(std::string text, size_t fontId, int* w, int* h)
 {
-	if (FontHash.count(fontId) > 0)
+	if (FontHash->count(fontId) > 0)
 	{
-		TTF_SizeText(FontHash[fontId], text, w, h);
+		TTF_SizeText(FontHash->at(fontId), text.c_str(), w, h);
 	}
 	else
 	{
@@ -228,8 +225,6 @@ void engino::SDLGraphics::GetTextSize(const char* text, size_t fontId, int* w, i
 		*h = 0;
 	}
 }
-
-
 #pragma endregion GetSizes
 
 SDL_Texture* g_TextureBuffer;
@@ -244,30 +239,44 @@ SDL_Texture* g_TextureBuffer;
 /// <param name="text">the text to display</param>
 /// <param name="color">the color of the text</param>
 /// <param name="scale">how big to scale.</param>
-void engino::SDLGraphics::DrawFont(int x, int y, int w, int h, size_t fontId, const char* text, const Color& color, float scale)
+void engino::SDLGraphics::DrawFont(float x, float y, int w, int h, size_t fontId, std::string text, const Color& color, int scale)
 {
 
-	if (FontHash.count(fontId) > 0)
+	if (FontHash->count(fontId) > 0)
 	{
 		SDL_Color _color = { color.red, color.green, color.blue, color.alpha };
-		TTF_Font* _font = FontHash[fontId];
+		TTF_Font* _font = FontHash->at(fontId);
 
 		SDL_Rect pos = {0};
-		pos.x = x;
-		pos.y = y;
-		TTF_SizeText(_font, text, &pos.w,&pos.h);
+		pos.x = static_cast<int>(x);
+		pos.y = static_cast<int>(y);
+		TTF_SizeText(_font, text.c_str(), &pos.w, &pos.h);
 		pos.w *= scale;
 		pos.h *= scale;
 
-		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text, _color);
+		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), _color);
 		g_TextureBuffer = SDL_CreateTextureFromSurface(renderer, _surface);
 		SDL_RenderCopy(renderer, g_TextureBuffer, nullptr, &pos);
 		SDL_FreeSurface(_surface);
+		SDL_DestroyTexture(g_TextureBuffer);
 	}
 }
 
 void engino::SDLGraphics::Exit() {
 
+	for (auto it : *FontHash) {
+		TTF_CloseFont(it.second);
+	}
+	for (auto it : *hashMap) {
+		SDL_DestroyTexture(it.second);
+	}
+	FontHash->clear();
+	hashMap->clear();
+	IMG_Quit();
+	TTF_Quit();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(Window);
+	delete FontHash;
+	delete hashMap;
+	SDL_Quit();
 }

@@ -8,15 +8,17 @@ using namespace engino;
 /// Initialises the File ID when the component is created
 /// </summary>
 /// <param name="filename">the file's path from /deployment</param>
-void SpriteRenderer::Init(const char* filename)
+void SpriteRenderer::Init(std::string filename, float _w, float _h)
 {
 	m_spriteID = Engine::Get()->gfx().LoadTexture(filename);
+	m_w = _w;
+	m_h = _h;
 }
 
 
 void SpriteRenderer::Draw()
 {
-	Engine::Get()->gfx().DrawSprite(m_Entity->GetX(), m_Entity->GetY(), 696, 564, 0, m_spriteID);
+	Engine::Get()->gfx().DrawSprite(m_Entity->GetX(), m_Entity->GetY(), m_w, m_h, 0, m_spriteID);
 
 }
 

@@ -1,24 +1,30 @@
 #include "UIScene.h"
 #include <iostream>
 #include "Engine.h"
-#include "Text.h"
+#include "SpriteRenderer.h"
 
 void engino::UIScene::Load()
 {
-	Entity* _e = Engine::Get()->wrld().Create("UITitle", 100, 50);
-	_e->AddComponent<Text>();
-	_e->GetComponent<Text>()->Init("assets/Roboto-Regular.ttf","Solomon's Key",1);
+	ticking = true;
+	Entity* _e = Engine::Get()->wrld().Create("UITitle", 0, 0);
+	_e->AddComponent<SpriteRenderer>()->Init("assets/title.png", 720,551);
 
-	Entity* _e2 = Engine::Get()->wrld().Create("UIText1", 100, 500);
-	_e2->AddComponent<Text>();
-	_e2->GetComponent<Text>()->Init("assets/Roboto-Regular.ttf", "Press [space] to play",0.5);
 }
 
-
-void engino::UIScene::Update()
+void engino::UIScene::Update(float dt)
 {
-	if (engino::Engine::Get()->input().IsKeyDown(EKeycodes::Key_Space)) {
-		engino::Engine::Get()->wrld().Load("Game");
+	if (canStart)
+	{
+		if (engino::Engine::Get()->input().IsKeyDown(EKeycodes::Key_Space)) {
+			engino::Engine::Get()->wrld().Load("Game");
+			startTime = 0;
+			ticking = false;
+		}
 	}
-}
 
+	startTime += dt;
+	if (startTime > 1) {
+		canStart = true;
+	}
+
+}

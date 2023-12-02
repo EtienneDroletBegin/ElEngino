@@ -8,21 +8,31 @@ namespace engino {
 	class Text : public Component, public IDrawable
 	{
 	public:
-		void Init(const char* filename, const char* text, float size);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <param name="text"></param>
+		/// <param name="size"></param>
+		void Init(std::string filename, std::string text, int size);
 		virtual void Draw() override;
 		Text(Entity* parent) :Component(parent) {
 
 		}
-		void SetText(const char* _text);
+		/// <summary>
+		/// changed the text to be displayed
+		/// </summary>
+		/// <param name="_text"></param>
+		void SetText(std::string _text);
 		Text() = default;
 		~Text() = default;
 
 
-	private:
+	protected:
 		size_t m_fontId;
-		const char* m_text;
+		std::string m_text;
 		float m_size;
-		float m_scale;
+		int m_scale;
 	};
 
 }

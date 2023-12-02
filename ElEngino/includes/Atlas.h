@@ -13,13 +13,24 @@ namespace engino {
 		Atlas() = default;
 		~Atlas() = default;
 		virtual void Draw() override;
-
-		void Addframe(const char* name, int x, int y, int w, int h);
-		void setFrame(const char* name);
+		/// <summary>
+		/// Adds a frame to the atlas
+		/// </summary>
+		/// <param name="name">the frame's name</param>
+		/// <param name="x">the x position on the spritesheet</param>
+		/// <param name="y">the y position on the spritesheet</param>
+		/// <param name="w">the width on the spritesheet</param>
+		/// <param name="h">the height on the spritesheet</param>
+		void Addframe(std::string name, int x, int y, int w, int h);
+		/// <summary>
+		/// changes the active frame
+		/// </summary>
+		/// <param name="name">the frame's name</param>
+		void setFrame(std::string name);
 
 
 	protected:
-		std::map<const char*, RectI> Framesmap;
+		std::map<std::string, RectI> Framesmap;
 		RectI currentFrame;
 	};
 

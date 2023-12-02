@@ -8,8 +8,7 @@ namespace engino {
 	{
 	public:
 		virtual void Load() override;
-		virtual void Update() override;
+		virtual void Update(float dt) override;
 	};
 
 }
-
